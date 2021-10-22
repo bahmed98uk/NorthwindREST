@@ -27,7 +27,6 @@ public class CustomersController {
         if (name == null) {
             return customerRepository.findAll();
         }
-
         List<CustomerEntity> foundCustomers = new ArrayList<>();
         for(CustomerEntity customerEntity: customerRepository.findAll()){
             if(customerEntity.getContactName().contains(name)){
