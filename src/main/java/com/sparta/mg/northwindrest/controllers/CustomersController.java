@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class CustomersController {
@@ -29,7 +30,7 @@ public class CustomersController {
         }
         List<CustomerEntity> foundCustomers = new ArrayList<>();
         for(CustomerEntity customerEntity: customerRepository.findAll()){
-            if(customerEntity.getContactName().contains(name)){
+            if(customerEntity.getContactName().toLowerCase().contains(name)){
                 foundCustomers.add(customerEntity);
             }
         }
