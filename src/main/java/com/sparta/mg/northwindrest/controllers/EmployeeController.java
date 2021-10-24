@@ -5,8 +5,8 @@ import com.sparta.mg.northwindrest.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class EmployeeController {
@@ -18,14 +18,22 @@ public class EmployeeController {
         this.employeeRepository = employeeRepository;
     }
 
-    @GetMapping("/employees")
-    public List<EmployeeEntity> getAllEmployees(){
-        return employeeRepository.findAll();
-    }
-
-    @GetMapping("/employees/{id}")
+    @GetMapping(value = "/employees")
     @ResponseBody
-    public Optional getEmployeesByName(@PathVariable Integer id) {
-        return employeeRepository.findById(id);
+    public List<EmployeeEntity> getEmployees(@RequestParam (required = false) @PathVariable Integer id,
+                                             @RequestParam (required = false) @PathVariable String name) {
+        if(id != null){
+            return employeeRepository.findById(id).stream().toList();
+        }
+        if(name != null){
+            List<EmployeeEntity> foundEmployees = new ArrayList<>();
+            for(EmployeeEntity employeeEntity: employeeRepository.findAll()){
+                if(employeeEntity.getFirstName().toLowerCase().contains(name.toLowerCase())){
+                    foundEmployees.add(employeeEntity);
+                }
+            }
+            return foundEmployees;
+        }
+        else return employeeRepository.findAll();
     }
 }
